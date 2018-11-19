@@ -1,9 +1,14 @@
 from flask import Flask, jsonify, request, abort
 from pymongo import MongoClient
 import cryptograph
+import configparser
+
+config = configparser.ConfigParser()
+config.read('mongodb.ini')
+
 
 app = Flask(__name__)
-mongo = MongoClient('mongodb://localhost:27017/')
+mongo = MongoClient('mongodb://' + config['mongo']['IP'] + ':' + config['mongo']['PORT'] + '/')
 mongodb = mongo.cryptoapi
 
 
