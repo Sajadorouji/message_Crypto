@@ -43,5 +43,14 @@ class DBcomm:
         if (mongokey.insert_one(mydict)):
             return 0
 
+    def newUser(self, username, email, pubkey):
+        userData = self.mongodb.users
+        if userData.find_one({"owner": username}):
+            return "user Already Existed !!!"
+        userNew = {"owner": username, "email": email}
+        userData.insert_one(userNew)
+        keysData = self.mongodb.keys
+        keyColl = {"owner": username, "pubkey": pubkey}
+        keysData.insert_one(keyColl)
 
 

@@ -40,6 +40,13 @@ def set_messages(username):
         print("Wrong User!!!")
         return abort(404)
 
+@app.route('/newuser', methods=['POST'])
+def set_messages():
+    content = request.get_json()
+    x = newmongo.newUser(content['owner'], content['email'], content['pubkey'])
+    if x:
+        return "New User Created!!!"
+
 
 @app.route('/messages/<string:username>/key', methods=['GET'])
 def get_user_key(username):
