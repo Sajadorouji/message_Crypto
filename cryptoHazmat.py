@@ -13,7 +13,7 @@ class CryptoHazmat:
     def createKeysfile(self):
         if not os.path.exists(self.path):
             os.makedirs(self.path)
-        if not os.path.isfile(self.path + "/privatekey.key"):
+        if not os.path.isfile(self.path + "/private.key"):
             self.private_key = rsa.generate_private_key(public_exponent=65537, key_size=2048, backend=default_backend())
             self.publickey = self.private_key.public_key()
             privateFile = open(self.path + "/privatekey.key", "w")
