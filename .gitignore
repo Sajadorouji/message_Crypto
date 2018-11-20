@@ -2,3 +2,5 @@ key*
 venv*
 .idea*
 __pycache__
+cryptograph.cpython-36.pyc
+__pycache__/cryptograph.cpython-36.pyc
