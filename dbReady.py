@@ -15,7 +15,7 @@ if __name__ == '__main__':
     mydict = {"owner": "sajad", "email": "sajad.orj@gmail.com"}
     collectionUsers.insert_one(mydict)
     mydict.clear()
-    mydict = {"owner": "sajad", "email": "sajad.orj@gmail.com", "message": """-----BEGIN PGP MESSAGE-----
+    mydict = {"owner": "sajad", "message": """-----BEGIN PGP MESSAGE-----
 
 hQEMA9HsxFJ7Ct5OAQgAikUK05vJqRQlRcH77NhWQcSwi0Iti/BgTk2fA0Tv/E3J
 OnOtsvZRACz9JmHIlBb4hDAC8agPQ22Dl7u7Jje1QfbWAIAnVAnZW6N2afFlI6hE

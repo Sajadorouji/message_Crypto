@@ -17,6 +17,7 @@ class Crypto:
         return self.gpg.export_keys(keyids=self.email)
 
     def encryptdata(self, input_enc_data, user):
+        # self.gpg.
         encrypted_ascii_data = str(self.gpg.encrypt(input_enc_data, user))
         return encrypted_ascii_data
 

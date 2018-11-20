@@ -28,12 +28,12 @@ def get_messages(username):
 
 
 @app.route('/messages/<string:username>/list', methods=['POST'])
-def set_messages(username, email):
+def set_messages(username):
     mongoget = mongodb.messages
     get_username = mongoget.find_one({'owner': username})
     output = []
     if get_username:
-        cryptoinit = cryptograph.Crypto(username, email)
+        cryptoinit = cryptograph.Crypto(username, email=get_username["email"])
         encryptmessage = cryptoinit.encryptdata(get_username['message'], username)
         output.append({'owner': get_username['owner'], 'enc_message': encryptmessage, 'sender': get_username['sender'], 'time': get_username['time']})
         return jsonify({'messages': output})
