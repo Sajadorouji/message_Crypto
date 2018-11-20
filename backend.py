@@ -1,6 +1,7 @@
 from flask import Flask, jsonify, request, abort
 from pymongo import MongoClient
 import cryptograph
+import dbclass
 import configparser
 
 config = configparser.ConfigParser()
@@ -10,33 +11,31 @@ config.read('mongodb.ini')
 app = Flask(__name__)
 mongo = MongoClient('mongodb://' + config['mongo']['IP'] + ':' + config['mongo']['PORT'] + '/')
 mongodb = mongo.cryptoapi
-
+newmongo = dbclass.DBcomm(config['mongo']['IP'], config['mongo']['PORT'], 'cryptoapi')
 
 @app.route('/messages/<string:username>/list', methods=['GET'])
 def get_messages(username):
-    mongoget = mongodb.messages
-    get_username = mongoget.find_one({'owner': username})
     output = []
-    if get_username:
-        cryptoinit = cryptograph.Crypto(username, email=get_username["email"])
-        decryptmessage = cryptoinit.decryptdata(get_username['message'])
-        output.append({'owner': get_username['owner'], 'enc_message': decryptmessage, 'sender': get_username['sender'], 'time': get_username['time']})
-        return jsonify({'messages': output})
+    get_username = newmongo.getUser(username)
+    if get_username == 0:
+        dataout = newmongo.getMessage(username)
+        return jsonify({'messages': dataout})
     else:
         print("Wrong User!!!")
         return abort(404)
 
 
-@app.route('/messages/<string:username>/list', methods=['POST'])
+@app.route('/messages/<string:username>/inbox', methods=['POST'])
 def set_messages(username):
-    mongoget = mongodb.messages
-    get_username = mongoget.find_one({'owner': username})
-    output = []
-    if get_username:
-        cryptoinit = cryptograph.Crypto(username, email=get_username["email"])
-        encryptmessage = cryptoinit.encryptdata(get_username['message'], username)
-        output.append({'owner': get_username['owner'], 'enc_message': encryptmessage, 'sender': get_username['sender'], 'time': get_username['time']})
-        return jsonify({'messages': output})
+    get_username = newmongo.getUser(username)
+    if get_username == 0:
+        content = request.get_json()
+        print(content)
+        x = newmongo.setMessage(content['owner'], content['message'], content['sender'])
+        if x == 0:
+            return "ok"
+        else:
+            return "not ok"
     else:
         print("Wrong User!!!")
         return abort(404)

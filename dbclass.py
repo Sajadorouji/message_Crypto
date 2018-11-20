@@ -1,6 +1,7 @@
 from pymongo import MongoClient
 import datetime
 
+
 class DBcomm:
     def __init__(self, ipadd, port, dbname):
         self.ipadd = ipadd
@@ -19,13 +20,28 @@ class DBcomm:
         if not mongokey.find_one({'owner': username}):
             mydict = {"owener": username, "pubkey": pub_key}
             mongokey.insert_one(mydict)
-
+    def getUser(self, username):
+        mongokey = self.mongodb.users
+        if (mongokey.find_one({"owner": username})):
+            return 0
+        else:
+            return 1
     def setTask(self):
         pass
+
+    def getMessage(self, username):
+        output = []
+        mongokey = self.mongodb.messages
+        for docs in mongokey.find({"owner": username}):
+            docs.pop('_id')
+            output.append(docs)
+        return output
+
     def setMessage(self, username, message, sender):
         mongokey = self.mongodb.messages
         mydict = {"owner": username, "message": message, "sender": sender, "time": str(datetime.datetime.now())}
-        mongokey.insert_one(mydict)
+        if (mongokey.insert_one(mydict)):
+            return 0
 
 
 

@@ -33,21 +33,20 @@ if __name__ == '__main__':
     # importing the requests library
 
     # your source code here
-    source_code = ''' 
-    print("Hello, world!") 
-    a = 1 
-    b = 2 
-    print(a + b) 
-    '''
 
     # data to be sent to api
-    data = {'owner': API_KEY,
-            'message': 'paste',
-            'sender': source_code,
-            'time': 'python'}
-
+    # data = {'owner': 'abc',
+    #         'message': 'paste',
+    #         'sender': 'asd',
+    #         'time': 'python'}
+    headers = {'Content-type': 'application/json', 'Accept': 'text/plain'}
     # sending post request and saving response as response object
-    r = requests.post(url=URL, data=data)
+    data = json.dumps({'owner': 'sajad',
+            'message': 'paste',
+            'sender': 'asd',
+            'time': 'python'})
+    URL = "http://127.0.0.1:5000/messages/sajad/inbox"
+    r = requests.post(url=URL, data=data, headers=headers)
 
     # extracting response text
     pastebin_url = r.text
