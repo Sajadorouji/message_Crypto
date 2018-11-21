@@ -19,6 +19,8 @@ def get_messages(username):
     get_username = newmongo.getUser(username)
     if get_username == 0:
         dataout = newmongo.getMessage(username)
+        newmongo.closeCon()
+        mongo.close()
         return jsonify({'messages': dataout})
     else:
         print("Wrong User!!!")
@@ -41,7 +43,7 @@ def set_messages(username):
         return abort(404)
 
 @app.route('/newuser', methods=['POST'])
-def set_messages():
+def createUser():
     content = request.get_json()
     x = newmongo.newUser(content['owner'], content['email'], content['pubkey'])
     if x:
@@ -53,6 +55,7 @@ def get_user_key(username):
 
     mongoget = mongodb.tasks
     get_username = mongoget.find_one({'user': username})
+    return get_username
 
 
 @app.route('/messages/<string:username>/key', methods=['POST'])

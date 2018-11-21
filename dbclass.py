@@ -53,4 +53,6 @@ class DBcomm:
         keyColl = {"owner": username, "pubkey": pubkey}
         keysData.insert_one(keyColl)
 
+    def closeCon(self):
+        self.mongo.close()
 

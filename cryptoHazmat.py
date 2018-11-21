@@ -23,9 +23,11 @@ class CryptoHazmat:
             publicFile.write(str(self.publickey.public_bytes(encoding = serialization.Encoding.PEM, format = serialization.PublicFormat.SubjectPublicKeyInfo)))
             publicFile.close()
 
-    def encryptData(self, message):
-        pass
-    def decryptData(self, enc_message):
+    def encryptData(self, message, pubkey):
+        self.publickey = pubkey
+
+
+    def decryptData(self, enc_message, privatekey):
         pass
 
 
