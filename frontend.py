@@ -1,8 +1,7 @@
-import json
+import json ,re
 import requests
-import configparser
-import cryptograph
-import datetime
+import cryptoHazmat
+
 
 headers = {'Content-type': 'application/json', 'Accept': 'text/plain'}
 myusername = ''
@@ -30,18 +29,29 @@ def get_messages():
         return None
 
 def set_messages(user, message, sender):
-    data = json.dumps({'owner': user,
-            'message': message,
-            'sender': sender,
-            'time': str(datetime.datetime.now())})
+    pubkey = requests.get(url='http://127.0.0.1:5000/' + user + '/key', headers=headers)
+    print(pubkey.text)
+    # print(re.sub('b\'-----BEGIN PUBLIC KEY-----\\n', '', str(pubkey.text)))
+    # print(b64data)
+    # b64data = re.sub('b\'-----BEGIN PUBLIC KEY-----\\n', '', b64data)
+    # print(b64data)
+    encrypting = cryptoHazmat.CryptoHazmat('./')
+    encryptedMSG = encrypting.encryptData(message, pubkey.text)
+    print(encryptedMSG)
 
-    URL = "http://127.0.0.1:5000/messages/sajad/inbox"
-    r = requests.post(url=URL, data=data, headers=headers)
-
-    # extracting response text
-    pastebin_url = r.text
-    print("The pastebin URL is:%s" % pastebin_url)
+    # data = json.dumps({'owner': user,
+    #         'message': encryptedMSG,
+    #         'sender': sender,
+    #         'time': str(datetime.datetime.now())})
+    #
+    # URL = "http://127.0.0.1:5000/messages/sajad/inbox"
+    # r = requests.post(url=URL, data=data, headers=headers)
+    #
+    # # extracting response text
+    # pastebin_url = r.text
+    # print("The pastebin URL is:%s" % pastebin_url)
 
 if __name__ == "__main__":
 
-    get_messages()
+    # get_messages()
+    set_messages('sajad', b'helloThere', 'me')

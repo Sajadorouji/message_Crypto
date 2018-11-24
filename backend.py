@@ -50,16 +50,18 @@ def createUser():
         return "New User Created!!!"
 
 
-@app.route('/messages/<string:username>/key', methods=['GET'])
+@app.route('/<string:username>/key', methods=['GET'])
 def get_user_key(username):
 
-    mongoget = mongodb.tasks
-    get_username = mongoget.find_one({'user': username})
-    return get_username
+    mongoget = mongodb.keys
+    get_username = mongoget.find_one({'owner': username})
+    print(get_username)
+    return get_username['pubKey']
 
 
 @app.route('/messages/<string:username>/key', methods=['POST'])
 def set_user_key(username, email):
+    ### Strip fucking keys START AND END
     if not request.json or 'username' not in request.json:
         abort(400)
     mongopost = mongodb.keys
