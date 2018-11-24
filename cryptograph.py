@@ -2,13 +2,22 @@ import gnupg
 import os
 
 class Crypto:
-    def __init__(self, username, email):
+    def __init__(self):
+        self.gpg = ''
+        self.username = ''
+        self.email = ''
+
+    def initkeys(self, username, email):
         self.username = username
         self.email = email
         self.gpg = gnupg.GPG(gnupghome='./key')
         if not os.listdir(self.gpg.gnupghome):
-            init_key = self.gpg.gen_key_input(key_type="RSA", key_length=2048, name_real=self.username, name_email=self.email)
+            init_key = self.gpg.gen_key_input(key_type="RSA", key_length=2048, name_real=self.username,
+                                              name_email=self.email)
             self.gpg.gen_key(init_key)
+
+    def setKeyhome(self):
+        self.gpg = gnupg.GPG(gnupghome='./publicKeys')
 
     def import_keys(self, pubkey):
         self.gpg.import_keys(pubkey)

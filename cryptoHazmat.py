@@ -20,15 +20,24 @@ class CryptoHazmat:
             self.private_key = rsa.generate_private_key(public_exponent=65537, key_size=2048, backend=default_backend())
             self.publickey = self.private_key.public_key()
             privateFile = open(self.path + "/private.key", "w")
-            privateFile.write(str(self.private_key.private_bytes(encoding=serialization.Encoding.PEM, format=serialization.PrivateFormat.TraditionalOpenSSL, encryption_algorithm = serialization.NoEncryption())))
+            privateFile.write(str(self.private_key.private_bytes(encoding=serialization.Encoding.PEM,
+                                                                 format=serialization.PrivateFormat.TraditionalOpenSSL,
+                                                                 encryption_algorithm=serialization.NoEncryption())))
             privateFile.close()
             publicFile = open(self.path + "/public.key", "w")
-            publicFile.write(str(self.publickey.public_bytes(encoding=serialization.Encoding.PEM, format=serialization.PublicFormat.SubjectPublicKeyInfo)))
+            publicFile.write(str(self.publickey.public_bytes(encoding=serialization.Encoding.PEM,
+                                                             format=serialization.PublicFormat.SubjectPublicKeyInfo)))
             publicFile.close()
 
     def encryptData(self, message, pubkey):
-        self.publickey = load_der_public_key(base64.b64decode(str(pubkey)), default_backend())
-        ciphertext = self.publickey.encrypt(message, padding.OAEP(mgf=padding.MGF1(algorithm=hashes.SHA256()), algorithm=hashes.SHA256(), label=None))
+        print(type(pubkey))
+        print(pubkey)
+        sssss ="MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAuQcRwllNYJEqPiTP+RMo\nzDaOf2QLZ8++O0wCVBDlhNHo2vQ1iNCBHdRyyyqLW+xuD1+pEgBJL0LGMOQHHDUA\nTgLnLZtnbRGGXDitngT760ROxMFB97x9H80XPHQCTqD7SYcelWrYp/c/UdojJMBH\ngBIMLeP+Xsi4ueIQegM9eonMQ/DgNOcHAPNd/pzhZEOa35tdJkxMvjbqa3ubFEIW\nyK9AYkTNmcryPrukswJY5ST3d+ls1yZNuNqcTJXxkebubELzioJDYiYjw39Bsroe\nRvaUPrC0Feco8dKq2j0xce6oJrzibQK+uEIFOJrTWsVJucQ5gMgSkDJNn9nSnCNB\naQIDAQAB"
+        print(base64.b64decode(sssss))
+        self.publickey = load_der_public_key(pubkey, backend=default_backend())
+        print(type(self.publickey))
+        ciphertext = self.publickey.encrypt(message, padding.OAEP(mgf=padding.MGF1(algorithm=hashes.SHA256()),
+                                                                  algorithm=hashes.SHA256(), label=None))
         return ciphertext
 
 
